@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>AI Resume Builder</title>
+
+<link rel="stylesheet"
+href="{{ url_for('static',
+filename='style.css') }}">
+
+</head>
+
+<body>
+
+<div class="navbar">
+
+<h1>Build Your Resume with AI</h1>
+
+<button id="downloadBtn">
+Download PDF
+</button>
+
+</div>
+
+<div class="container">
+
+<!-- LEFT -->
+
+<div class="left-panel">
+
+<!-- PERSONAL -->
+
+<div class="card">
+
+<h2>Personal Info</h2>
+
+<div class="photo-upload">
+
+<img id="previewImage">
+
+<label for="imageInput">
+Upload Photo
+</label>
+
+<input type="file"
+id="imageInput"
+accept="image/*">
+
+</div>
+
+<input type="text"
+id="name"
+placeholder="Full Name">
+
+<input type="email"
+id="email"
+placeholder="Email">
+
+<input type="text"
+id="phone"
+placeholder="Phone">
+
+<input type="text"
+id="linkedin"
+placeholder="LinkedIn Link">
+
+<input type="text"
+id="github"
+placeholder="GitHub Link">
+
+<textarea id="summary"
+placeholder="Professional Summary"></textarea>
+
+</div>
+
+<!-- SKILLS -->
+
+<div class="card">
+
+<h2>Skills</h2>
+
+<textarea id="skills"
+placeholder="Python, Flask, AI"></textarea>
+
+</div>
+
+<!-- EDUCATION -->
+
+<div class="card">
+
+<div class="heading">
+
+<h2>Education</h2>
+
+<button onclick="addEducation()">
++ Add
+</button>
+
+</div>
+
+<div id="educationContainer">
+
+</div>
+
+</div>
+
+<!-- EXPERIENCE -->
+
+<div class="card">
+
+<div class="heading">
+
+<h2>Experience</h2>
+
+<button onclick="addExperience()">
++ Add
+</button>
+
+</div>
+
+<div id="experienceContainer">
+
+</div>
+
+</div>
+
+<!-- CERTIFICATIONS -->
+
+<div class="card">
+
+<div class="heading">
+
+<h2>Certifications</h2>
+
+<button onclick="addCertification()">
++ Add
+</button>
+
+</div>
+
+<div id="certificationContainer">
+
+</div>
+
+</div>
+
+<!-- PROJECTS -->
+
+<div class="card">
+
+<h2>Projects</h2>
+
+<textarea id="projects"
+placeholder="Projects"></textarea>
+
+</div>
+
+<!-- CUSTOM -->
+
+<div class="card">
+
+<h2>Custom Section</h2>
+
+<input type="text"
+id="customTitle"
+placeholder="Custom Section Title">
+
+<textarea id="customContent"
+placeholder="Custom Content"></textarea>
+
+</div>
+
+<!-- TEMPLATE -->
+
+<div class="card">
+
+<h2>Template</h2>
+
+<select id="templateSelect">
+
+<option value="template1">
+Modern
+</option>
+
+<option value="template2">
+Professional
+</option>
+
+<option value="template3">
+Minimal
+</option>
+
+</select>
+
+</div>
+
+</div>
+
+<!-- RIGHT -->
+
+<div class="right-panel">
+
+<div class="resume-preview template1"
+id="resumePreview">
+
+<img id="resumeImage">
+
+<h1 id="previewName">
+YOUR NAME
+</h1>
+
+<p id="previewContact">
+Email | Phone
+</p>
+
+<p id="previewLinks"></p>
+
+<hr>
+
+<div>
+
+<h3>SUMMARY</h3>
+
+<p id="previewSummary"></p>
+
+</div>
+
+<div>
+
+<h3>SKILLS</h3>
+
+<p id="previewSkills"></p>
+
+</div>
+
+<div>
+
+<h3>EDUCATION</h3>
+
+<div id="previewEducation"></div>
+
+</div>
+
+<div>
+
+<h3>EXPERIENCE</h3>
+
+<div id="previewExperience"></div>
+
+</div>
+
+<div>
+
+<h3>CERTIFICATIONS</h3>
+
+<div id="previewCertification"></div>
+
+</div>
+
+<div>
+
+<h3>PROJECTS</h3>
+
+<p id="previewProjects"></p>
+
+</div>
+
+<div>
+
+<h3 id="previewCustomTitle"></h3>
+
+<p id="previewCustomContent"></p>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+<div class="website-footer">
+
+Developed by OM AWATIRAK AND TEAM
+
+</div>
+
+<script src="{{ url_for('static',
+filename='script.js') }}"></script>
+
+</body>
+</html>
