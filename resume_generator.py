@@ -634,6 +634,6 @@ def generate_resume(data):
 
     # PDF OUTPUT
 
-    pdf_output = pdf.output(dest='S')
+    pdf_bytes = bytes(pdf.output())
 
-    return pdf_output.encode('latin-1')
+    return pdf_bytes
