@@ -10,6 +10,12 @@ content="width=device-width, initial-scale=1.0">
 
 <title>AI Resume Builder</title>
 
+<!-- GOOGLE FONT -->
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<!-- CSS -->
+
 <link rel="stylesheet"
 href="{{ url_for('static',
 filename='style.css') }}">
@@ -18,23 +24,29 @@ filename='style.css') }}">
 
 <body>
 
+<!-- NAVBAR -->
+
 <div class="navbar">
 
-<h1>Build Your Resume with AI</h1>
+<h1>AI Resume Builder</h1>
 
 <button id="downloadBtn">
+
 Download PDF
+
 </button>
 
 </div>
 
+<!-- MAIN CONTAINER -->
+
 <div class="container">
 
-<!-- LEFT -->
+<!-- LEFT PANEL -->
 
 <div class="left-panel">
 
-<!-- PERSONAL -->
+<!-- PERSONAL INFO -->
 
 <div class="card">
 
@@ -45,7 +57,9 @@ Download PDF
 <img id="previewImage">
 
 <label for="imageInput">
+
 Upload Photo
+
 </label>
 
 <input type="file"
@@ -60,21 +74,22 @@ placeholder="Full Name">
 
 <input type="email"
 id="email"
-placeholder="Email">
+placeholder="Email Address">
 
 <input type="text"
 id="phone"
-placeholder="Phone">
-
-<input type="text"
-id="linkedin"
-placeholder="LinkedIn Link">
+placeholder="Mobile Number">
 
 <input type="text"
 id="github"
 placeholder="GitHub Link">
 
-<textarea id="summary"
+<input type="text"
+id="linkedin"
+placeholder="LinkedIn Link">
+
+<textarea
+id="summary"
 placeholder="Professional Summary"></textarea>
 
 </div>
@@ -85,8 +100,11 @@ placeholder="Professional Summary"></textarea>
 
 <h2>Skills</h2>
 
-<textarea id="skills"
-placeholder="Python, Flask, AI"></textarea>
+<textarea
+id="skills"
+placeholder="Technical Skills: Python, Flask, Java
+
+Soft Skills: Leadership, Communication"></textarea>
 
 </div>
 
@@ -99,7 +117,9 @@ placeholder="Python, Flask, AI"></textarea>
 <h2>Education</h2>
 
 <button onclick="addEducation()">
+
 + Add
+
 </button>
 
 </div>
@@ -119,7 +139,9 @@ placeholder="Python, Flask, AI"></textarea>
 <h2>Experience</h2>
 
 <button onclick="addExperience()">
+
 + Add
+
 </button>
 
 </div>
@@ -139,7 +161,9 @@ placeholder="Python, Flask, AI"></textarea>
 <h2>Certifications</h2>
 
 <button onclick="addCertification()">
+
 + Add
+
 </button>
 
 </div>
@@ -156,12 +180,15 @@ placeholder="Python, Flask, AI"></textarea>
 
 <h2>Projects</h2>
 
-<textarea id="projects"
-placeholder="Projects"></textarea>
+<textarea
+id="projects"
+placeholder="AI Resume Builder: Developed Flask based resume generator.
+
+PDF Chatbot: Built chatbot for PDF analysis."></textarea>
 
 </div>
 
-<!-- CUSTOM -->
+<!-- CUSTOM SECTION -->
 
 <div class="card">
 
@@ -171,8 +198,9 @@ placeholder="Projects"></textarea>
 id="customTitle"
 placeholder="Custom Section Title">
 
-<textarea id="customContent"
-placeholder="Custom Content"></textarea>
+<textarea
+id="customContent"
+placeholder="Write custom content"></textarea>
 
 </div>
 
@@ -180,20 +208,26 @@ placeholder="Custom Content"></textarea>
 
 <div class="card">
 
-<h2>Template</h2>
+<h2>Resume Template</h2>
 
 <select id="templateSelect">
 
 <option value="template1">
+
 Modern
+
 </option>
 
 <option value="template2">
+
 Professional
+
 </option>
 
 <option value="template3">
+
 Minimal
+
 </option>
 
 </select>
@@ -202,26 +236,40 @@ Minimal
 
 </div>
 
-<!-- RIGHT -->
+<!-- RIGHT PANEL -->
 
 <div class="right-panel">
 
 <div class="resume-preview template1"
 id="resumePreview">
 
+<!-- IMAGE -->
+
 <img id="resumeImage">
 
+<!-- NAME -->
+
 <h1 id="previewName">
+
 YOUR NAME
+
 </h1>
 
+<!-- CONTACT -->
+
 <p id="previewContact">
-Email | Phone
+
+email@gmail.com | 9876543210
+
 </p>
 
-<p id="previewLinks"></p>
+<!-- LINKS -->
 
-<hr>
+<div id="previewLinks">
+
+</div>
+
+<!-- SUMMARY -->
 
 <div>
 
@@ -231,6 +279,8 @@ Email | Phone
 
 </div>
 
+<!-- SKILLS -->
+
 <div>
 
 <h3>SKILLS</h3>
@@ -239,29 +289,43 @@ Email | Phone
 
 </div>
 
+<!-- EDUCATION -->
+
 <div>
 
 <h3>EDUCATION</h3>
 
-<div id="previewEducation"></div>
+<div id="previewEducation">
 
 </div>
+
+</div>
+
+<!-- EXPERIENCE -->
 
 <div>
 
 <h3>EXPERIENCE</h3>
 
-<div id="previewExperience"></div>
+<div id="previewExperience">
 
 </div>
+
+</div>
+
+<!-- CERTIFICATIONS -->
 
 <div>
 
 <h3>CERTIFICATIONS</h3>
 
-<div id="previewCertification"></div>
+<div id="previewCertification">
 
 </div>
+
+</div>
+
+<!-- PROJECTS -->
 
 <div>
 
@@ -270,6 +334,8 @@ Email | Phone
 <p id="previewProjects"></p>
 
 </div>
+
+<!-- CUSTOM -->
 
 <div>
 
@@ -284,11 +350,8 @@ Email | Phone
 </div>
 
 </div>
-<div class="website-footer">
 
-Developed by OM AWATIRAK AND TEAM
-
-</div>
+<!-- JAVASCRIPT -->
 
 <script src="{{ url_for('static',
 filename='script.js') }}"></script>

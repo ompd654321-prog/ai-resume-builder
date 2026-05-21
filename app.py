@@ -2,47 +2,72 @@ from flask import Flask
 from flask import render_template
 from flask import request
 from flask import send_file
-from flask import after_this_request
 
 from resume_generator import generate_resume
 
-import os
+from io import BytesIO
 
 app = Flask(__name__)
+
+
+# HOME PAGE
 
 @app.route("/")
 def home():
 
     return render_template("index.html")
 
+
+# PDF GENERATION
+
 @app.route("/generate_pdf", methods=["POST"])
 def generate_pdf():
 
-    data = request.json
+    try:
 
-    pdf_path = generate_resume(data)
+        # GET DATA FROM FRONTEND
 
-    @after_this_request
-    def remove_file(response):
+        data = request.json
 
-        try:
+        # GENERATE PDF
 
-            if os.path.exists(pdf_path):
+        pdf_data = generate_resume(data)
 
-                os.remove(pdf_path)
+        # STORE PDF IN MEMORY
 
-        except Exception as e:
+        pdf_buffer = BytesIO(pdf_data)
 
-            print(e)
+        pdf_buffer.seek(0)
 
-        return response
+        # SEND PDF
 
-    return send_file(
-        pdf_path,
-        as_attachment=True,
-        download_name="resume.pdf"
-    )
+        return send_file(
+
+            pdf_buffer,
+
+            as_attachment=True,
+
+            download_name="resume.pdf",
+
+            mimetype="application/pdf"
+
+        )
+
+    except Exception as e:
+
+        print("PDF ERROR:", e)
+
+        return {
+
+            "error": str(e)
+
+        }, 500
+
+
+# RUN APP
 
 if __name__ == "__main__":
 
-    app.run(debug=True)
+    app.run(
+        debug=True
+    )

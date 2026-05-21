@@ -1,16 +1,49 @@
 from fpdf import FPDF
 import base64
 import tempfile
-import uuid
 import os
+
+
+def clean_text(text):
+
+    if not text:
+        return ""
+
+    replacements = {
+
+        "•": "-",
+        "–": "-",
+        "—": "-",
+        "“": '"',
+        "”": '"',
+        "‘": "'",
+        "’": "'",
+        "\u00a0": " "
+
+    }
+
+    for old, new in replacements.items():
+
+        text = text.replace(old, new)
+
+    return text
+
 
 class ResumePDF(FPDF):
 
     def section_title(self, title):
 
-        self.set_font("Arial", 'B', 13)
+        self.set_font(
+            "Helvetica",
+            'B',
+            13
+        )
 
-        self.set_text_color(30, 30, 30)
+        self.set_text_color(
+            30,
+            30,
+            30
+        )
 
         self.cell(
             0,
@@ -19,7 +52,11 @@ class ResumePDF(FPDF):
             ln=True
         )
 
-        self.set_draw_color(120, 120, 120)
+        self.set_draw_color(
+            120,
+            120,
+            120
+        )
 
         self.line(
             12,
@@ -32,12 +69,16 @@ class ResumePDF(FPDF):
 
     def section_body(self, text):
 
-        self.set_font("Arial", '', 11)
+        self.set_font(
+            "Helvetica",
+            '',
+            11
+        )
 
         self.multi_cell(
             0,
             6,
-            text
+            clean_text(text)
         )
 
         self.ln(2)
@@ -112,17 +153,21 @@ def generate_resume(data):
     # NAME
 
     pdf.set_font(
-        "Arial",
+        "Helvetica",
         'B',
         22
     )
 
-    pdf.set_text_color(20,20,20)
+    pdf.set_text_color(
+        20,
+        20,
+        20
+    )
 
     pdf.cell(
         0,
         10,
-        data["name"],
+        clean_text(data.get("name", "")),
         ln=True,
         align='C'
     )
@@ -130,7 +175,7 @@ def generate_resume(data):
     # CONTACT LINE
 
     pdf.set_font(
-        "Arial",
+        "Helvetica",
         '',
         10
     )
@@ -141,36 +186,38 @@ def generate_resume(data):
         70
     )
 
+    pdf.set_x(25)
+
+    # EMAIL
+
     pdf.cell(
         55,
         6,
-        data["email"],
-        align='R'
+        clean_text(data.get("email", ""))
+    )
+
+    # PHONE
+
+    pdf.cell(
+        5,
+        6,
+        "|"
     )
 
     pdf.cell(
-        10,
+        30,
         6,
-        "|",
-        align='C'
+        clean_text(data.get("phone", ""))
     )
 
-    pdf.cell(
-        35,
-        6,
-        data["phone"],
-        align='C'
-    )
+    # GITHUB
 
-    # GITHUB LINK
-
-    if data["github"]:
+    if data.get("github"):
 
         pdf.cell(
-            10,
+            5,
             6,
-            "|",
-            align='C'
+            "|"
         )
 
         pdf.set_text_color(
@@ -180,15 +227,15 @@ def generate_resume(data):
         )
 
         pdf.cell(
-            25,
+            22,
             6,
             "GitHub",
             link=data["github"]
         )
 
-    # LINKEDIN LINK
+    # LINKEDIN
 
-    if data["linkedin"]:
+    if data.get("linkedin"):
 
         pdf.set_text_color(
             70,
@@ -197,10 +244,9 @@ def generate_resume(data):
         )
 
         pdf.cell(
-            10,
+            5,
             6,
-            "|",
-            align='C'
+            "|"
         )
 
         pdf.set_text_color(
@@ -220,7 +266,7 @@ def generate_resume(data):
 
     # SUMMARY
 
-    if data["summary"]:
+    if data.get("summary"):
 
         pdf.section_title(
             "SUMMARY"
@@ -232,210 +278,362 @@ def generate_resume(data):
 
     # SKILLS
 
-    if data["skills"]:
+       # SKILLS
+
+    if data.get("skills"):
 
         pdf.section_title(
             "SKILLS"
         )
 
-        pdf.section_body(
-            data["skills"]
-        )
+        skill_lines = data["skills"].split("\n")
+
+        for line in skill_lines:
+
+            if ":" in line:
+
+                heading, content = line.split(":", 1)
+
+                # BOLD HEADING
+
+                pdf.set_font(
+                    "Helvetica",
+                    'B',
+                    10
+                )
+
+                pdf.set_text_color(
+                    20,
+                    20,
+                    20
+                )
+
+                pdf.write(
+                    6,
+                    clean_text(heading + ": ")
+                )
+
+                # NORMAL CONTENT
+
+                pdf.set_font(
+                    "Helvetica",
+                    '',
+                    10
+                )
+
+                pdf.set_text_color(
+                    60,
+                    60,
+                    60
+                )
+
+                pdf.write(
+                    6,
+                    clean_text(content.strip())
+                )
+
+                pdf.ln(8)
+
+            else:
+
+                pdf.set_font(
+                    "Helvetica",
+                    '',
+                    10
+                )
+
+                pdf.multi_cell(
+                    0,
+                    5,
+                    clean_text(line)
+                )
+
+        pdf.ln(2)
 
     # EDUCATION
 
-    if data["education"]:
+    education = data.get(
+        "education",
+        []
+    )
 
-        valid_edu = False
+    valid_edu = False
 
-        for edu in data["education"]:
+    for edu in education:
 
-            if edu["degree"]:
+        if edu.get("degree"):
 
-                valid_edu = True
+            valid_edu = True
 
-        if valid_edu:
+    if valid_edu:
 
-            pdf.section_title(
-                "EDUCATION"
-            )
+        pdf.section_title(
+            "EDUCATION"
+        )
 
-            for edu in data["education"]:
+        for edu in education:
 
-                if edu["degree"]:
+            if edu.get("degree"):
 
-                    pdf.set_font(
-                        "Arial",
-                        'B',
-                        11
-                    )
+                pdf.set_font(
+                    "Helvetica",
+                    'B',
+                    11
+                )
 
-                    pdf.cell(
-                        0,
-                        6,
-                        edu["degree"],
-                        ln=True
-                    )
+                pdf.cell(
+                    0,
+                    6,
+                    clean_text(
+                        edu["degree"]
+                    ),
+                    ln=True
+                )
 
-                    pdf.set_font(
-                        "Arial",
-                        '',
-                        10
-                    )
+                pdf.set_font(
+                    "Helvetica",
+                    '',
+                    10
+                )
 
-                    pdf.cell(
-                        0,
-                        5,
-                        f'{edu["college"]} ({edu["year"]})',
-                        ln=True
-                    )
+                line = (
+                    f'{edu.get("college","")} '
+                    f'({edu.get("year","")})'
+                )
 
-                    pdf.ln(2)
+                pdf.cell(
+                    0,
+                    5,
+                    clean_text(line),
+                    ln=True
+                )
+
+                pdf.ln(2)
 
     # EXPERIENCE
 
-    if data["experience"]:
+    experience = data.get(
+        "experience",
+        []
+    )
 
-        valid_exp = False
+    valid_exp = False
 
-        for exp in data["experience"]:
+    for exp in experience:
 
-            if exp["job"]:
+        if exp.get("job"):
 
-                valid_exp = True
+            valid_exp = True
 
-        if valid_exp:
+    if valid_exp:
 
-            pdf.section_title(
-                "EXPERIENCE"
-            )
+        pdf.section_title(
+            "EXPERIENCE"
+        )
 
-            for exp in data["experience"]:
+        for exp in experience:
 
-                if exp["job"]:
+            if exp.get("job"):
 
-                    pdf.set_font(
-                        "Arial",
-                        'B',
-                        11
+                pdf.set_font(
+                    "Helvetica",
+                    'B',
+                    11
+                )
+
+                pdf.cell(
+                    0,
+                    6,
+                    clean_text(
+                        exp["job"]
+                    ),
+                    ln=True
+                )
+
+                pdf.set_font(
+                    "Helvetica",
+                    '',
+                    10
+                )
+
+                pdf.cell(
+                    0,
+                    5,
+                    clean_text(
+                        exp.get("company","")
+                    ),
+                    ln=True
+                )
+
+                pdf.multi_cell(
+                    0,
+                    5,
+                    clean_text(
+                        exp.get("desc","")
                     )
+                )
 
-                    pdf.cell(
-                        0,
-                        6,
-                        exp["job"],
-                        ln=True
-                    )
-
-                    pdf.set_font(
-                        "Arial",
-                        '',
-                        10
-                    )
-
-                    pdf.cell(
-                        0,
-                        5,
-                        exp["company"],
-                        ln=True
-                    )
-
-                    pdf.multi_cell(
-                        0,
-                        5,
-                        exp["desc"]
-                    )
-
-                    pdf.ln(2)
+                pdf.ln(2)
 
     # CERTIFICATIONS
 
-    if data["certifications"]:
+    certifications = data.get(
+        "certifications",
+        []
+    )
 
-        valid_cert = False
+    valid_cert = False
 
-        for cert in data["certifications"]:
+    for cert in certifications:
 
-            if cert["name"]:
+        if cert.get("name"):
 
-                valid_cert = True
+            valid_cert = True
 
-        if valid_cert:
+    if valid_cert:
 
-            pdf.section_title(
-                "CERTIFICATIONS"
-            )
+        pdf.section_title(
+            "CERTIFICATIONS"
+        )
 
-            for cert in data["certifications"]:
+        for cert in certifications:
 
-                if cert["name"]:
+            if cert.get("name"):
 
-                    pdf.set_font(
-                        "Arial",
-                        'B',
-                        11
-                    )
+                pdf.set_font(
+                    "Helvetica",
+                    'B',
+                    11
+                )
 
-                    pdf.cell(
-                        0,
-                        6,
-                        cert["name"],
-                        ln=True
-                    )
+                pdf.cell(
+                    0,
+                    6,
+                    clean_text(
+                        cert["name"]
+                    ),
+                    ln=True
+                )
 
-                    pdf.set_font(
-                        "Arial",
-                        '',
-                        10
-                    )
+                pdf.set_font(
+                    "Helvetica",
+                    '',
+                    10
+                )
 
-                    pdf.cell(
-                        0,
-                        5,
-                        f'{cert["org"]} ({cert["year"]})',
-                        ln=True
-                    )
+                line = (
+                    f'{cert.get("org","")} '
+                    f'({cert.get("year","")})'
+                )
 
-                    pdf.ln(2)
+                pdf.cell(
+                    0,
+                    5,
+                    clean_text(line),
+                    ln=True
+                )
+
+                pdf.ln(2)
 
     # PROJECTS
 
-    if data["projects"]:
+ 
+        # PROJECTS
+
+    if data.get("projects"):
 
         pdf.section_title(
             "PROJECTS"
         )
 
-        pdf.section_body(
-            data["projects"]
-        )
+        projects = data["projects"].split("\n")
+
+        for project in projects:
+
+            if ":" in project:
+
+                title, desc = project.split(":", 1)
+
+                # PROJECT TITLE
+
+                pdf.set_font(
+                    "Helvetica",
+                    'B',
+                    11
+                )
+
+                pdf.set_text_color(
+                    20,
+                    20,
+                    20
+                )
+
+                pdf.multi_cell(
+                    0,
+                    6,
+                    clean_text(title)
+                )
+
+                # DESCRIPTION
+
+                pdf.set_x(15)
+
+                pdf.set_font(
+                    "Helvetica",
+                    '',
+                    10
+                )
+
+                pdf.set_text_color(
+                    60,
+                    60,
+                    60
+                )
+
+                pdf.multi_cell(
+                    180,
+                    5,
+                    clean_text(desc)
+                )
+
+                pdf.ln(2)
+
+            else:
+
+                pdf.set_x(15)
+
+                pdf.multi_cell(
+                    180,
+                    5,
+                    clean_text(project)
+                )
 
     # CUSTOM SECTION
 
     if (
-        data["customTitle"]
+        data.get("customTitle")
         and
-        data["customContent"]
+        data.get("customContent")
     ):
 
         pdf.section_title(
-            data["customTitle"]
+            clean_text(
+                data["customTitle"]
+            )
         )
 
         pdf.section_body(
             data["customContent"]
         )
 
-    # OUTPUT
-
-    output = f"resume_{uuid.uuid4()}.pdf"
-
-    pdf.output(output)
-
-    # DELETE TEMP IMAGE
+    # REMOVE TEMP IMAGE
 
     if image_path and os.path.exists(image_path):
 
         os.remove(image_path)
 
-    return output
+    # PDF OUTPUT
+
+    pdf_output = pdf.output(dest='S')
+
+    return pdf_output.encode('latin-1')

@@ -2,622 +2,521 @@ let uploadedImage = "";
 
 /* IMAGE UPLOAD */
 
-const imageInput =
-document.getElementById(
-"imageInput"
-);
+document.getElementById("imageInput")
+.addEventListener("change", function () {
 
-imageInput.addEventListener(
-"change",
-function(){
+    const file = this.files[0];
 
-const file = this.files[0];
+    if (file) {
 
-if(file){
+        const reader = new FileReader();
 
-const reader =
-new FileReader();
+        reader.onload = function (e) {
 
-reader.onload = function(e){
+            uploadedImage = e.target.result;
 
-uploadedImage =
-e.target.result;
+            document.getElementById("previewImage").src = uploadedImage;
+            document.getElementById("previewImage").style.display = "block";
 
-document.getElementById(
-"previewImage"
-).src = uploadedImage;
+            document.getElementById("resumeImage").src = uploadedImage;
+            document.getElementById("resumeImage").style.display = "block";
+        };
 
-document.getElementById(
-"previewImage"
-).style.display =
-"block";
-
-document.getElementById(
-"resumeImage"
-).src = uploadedImage;
-
-document.getElementById(
-"resumeImage"
-).style.display =
-"block";
-}
-
-reader.readAsDataURL(file);
-}
+        reader.readAsDataURL(file);
+    }
 });
+
 
 /* EDUCATION */
 
-function addEducation(){
+function addEducation() {
 
-const container =
-document.getElementById(
-"educationContainer"
-);
+    const container =
+        document.getElementById("educationContainer");
 
-const div =
-document.createElement("div");
+    const div = document.createElement("div");
 
-div.classList.add("edu-block");
+    div.classList.add("edu-block");
 
-div.innerHTML = `
+    div.innerHTML = `
+    
+    <input type="text" placeholder="Degree" class="degree">
 
-<input type="text"
-placeholder="Degree"
-class="degree">
+    <input type="text" placeholder="Institution" class="college">
 
-<input type="text"
-placeholder="Institution"
-class="college">
+    <input type="text" placeholder="Year" class="year">
 
-<input type="text"
-placeholder="Year"
-class="year">
+    <button class="delete-btn"
+    onclick="this.parentElement.remove(); updatePreview();">
 
-<button class="delete-btn"
-onclick="this.parentElement.remove();
-updatePreview();">
+    Delete
 
-Delete
+    </button>
+    `;
 
-</button>
-`;
+    container.appendChild(div);
 
-container.appendChild(div);
-
-addListeners();
+    addListeners();
 }
+
 
 /* EXPERIENCE */
 
-function addExperience(){
+function addExperience() {
 
-const container =
-document.getElementById(
-"experienceContainer"
-);
+    const container =
+        document.getElementById("experienceContainer");
 
-const div =
-document.createElement("div");
+    const div = document.createElement("div");
 
-div.classList.add("exp-block");
+    div.classList.add("exp-block");
 
-div.innerHTML = `
+    div.innerHTML = `
 
-<input type="text"
-placeholder="Job Title"
-class="job">
+    <input type="text" placeholder="Job Title" class="job">
 
-<input type="text"
-placeholder="Company"
-class="company">
+    <input type="text" placeholder="Company" class="company">
 
-<textarea
-placeholder="Responsibilities"
-class="desc"></textarea>
+    <textarea placeholder="Responsibilities"
+    class="desc"></textarea>
 
-<button class="delete-btn"
-onclick="this.parentElement.remove();
-updatePreview();">
+    <button class="delete-btn"
+    onclick="this.parentElement.remove(); updatePreview();">
 
-Delete
+    Delete
 
-</button>
-`;
+    </button>
+    `;
 
-container.appendChild(div);
+    container.appendChild(div);
 
-addListeners();
+    addListeners();
 }
 
-/* CERTIFICATION */
-
-function addCertification(){
-
-const container =
-document.getElementById(
-"certificationContainer"
-);
-
-const div =
-document.createElement("div");
-
-div.classList.add("edu-block");
-
-div.innerHTML = `
-
-<input type="text"
-placeholder="Certification Name"
-class="cert-name">
-
-<input type="text"
-placeholder="Organization"
-class="cert-org">
-
-<input type="text"
-placeholder="Year"
-class="cert-year">
-
-<button class="delete-btn"
-onclick="this.parentElement.remove();
-updatePreview();">
-
-Delete
-
-</button>
-`;
-
-container.appendChild(div);
-
-addListeners();
-}
-
-/* INPUT LISTENERS */
-
-function addListeners(){
-
-document.querySelectorAll(
-"input, textarea"
-).forEach(input => {
-
-input.removeEventListener(
-"input",
-updatePreview
-);
-
-input.addEventListener(
-"input",
-updatePreview
-);
-
-});
-}
-
-/* LIVE PREVIEW */
-
-function updatePreview(){
-
-document.getElementById(
-"previewName"
-).innerText =
-document.getElementById(
-"name"
-).value;
-
-document.getElementById(
-"previewContact"
-).innerText =
-document.getElementById(
-"email"
-).value
-+
-" | " +
-document.getElementById(
-"phone"
-).value;
-
-let linksHTML = "";
-
-if(
-document.getElementById(
-"linkedin"
-).value
-){
-
-linksHTML += `
-<span class="link-btn">
-LinkedIn
-</span>
-`;
-}
-
-if(
-document.getElementById(
-"github"
-).value
-){
-
-linksHTML += `
-<span class="link-btn">
-GitHub
-</span>
-`;
-}
-
-document.getElementById(
-"previewLinks"
-).innerHTML = linksHTML;
-
-document.getElementById(
-"linkedin"
-).value
-+
-"<br>" +
-document.getElementById(
-"github"
-).value;
-
-document.getElementById(
-"previewSummary"
-).innerText =
-document.getElementById(
-"summary"
-).value;
-
-document.getElementById(
-"previewSkills"
-).innerText =
-document.getElementById(
-"skills"
-).value;
-
-document.getElementById(
-"previewProjects"
-).innerText =
-document.getElementById(
-"projects"
-).value;
-
-document.getElementById(
-"previewCustomTitle"
-).innerText =
-document.getElementById(
-"customTitle"
-).value;
-
-document.getElementById(
-"previewCustomContent"
-).innerText =
-document.getElementById(
-"customContent"
-).value;
-
-/* EDUCATION */
-
-let eduHTML = "";
-
-document.querySelectorAll(
-".edu-block"
-).forEach(block => {
-
-if(block.querySelector(".degree")){
-
-const degree =
-block.querySelector(
-".degree"
-).value;
-
-const college =
-block.querySelector(
-".college"
-).value;
-
-const year =
-block.querySelector(
-".year"
-).value;
-
-eduHTML += `
-
-<p>
-
-<b>${degree}</b><br>
-
-${college} (${year})
-
-</p>
-`;
-}
-});
-
-document.getElementById(
-"previewEducation"
-).innerHTML =
-eduHTML;
-
-/* EXPERIENCE */
-
-let expHTML = "";
-
-document.querySelectorAll(
-".exp-block"
-).forEach(block => {
-
-const job =
-block.querySelector(
-".job"
-).value;
-
-const company =
-block.querySelector(
-".company"
-).value;
-
-const desc =
-block.querySelector(
-".desc"
-).value;
-
-expHTML += `
-
-<p>
-
-<b>${job}</b><br>
-
-${company}<br>
-
-${desc}
-
-</p>
-`;
-});
-
-document.getElementById(
-"previewExperience"
-).innerHTML =
-expHTML;
 
 /* CERTIFICATIONS */
 
-let certHTML = "";
+function addCertification() {
 
-document.querySelectorAll(
-".cert-name"
-).forEach((item,index) => {
+    const container =
+        document.getElementById("certificationContainer");
 
-const name =
-document.querySelectorAll(
-".cert-name"
-)[index].value;
+    const div = document.createElement("div");
 
-const org =
-document.querySelectorAll(
-".cert-org"
-)[index].value;
+    div.classList.add("edu-block");
 
-const year =
-document.querySelectorAll(
-".cert-year"
-)[index].value;
+    div.innerHTML = `
 
-certHTML += `
+    <input type="text"
+    placeholder="Certification Name"
+    class="cert-name">
 
-<p>
+    <input type="text"
+    placeholder="Organization"
+    class="cert-org">
 
-<b>${name}</b><br>
+    <input type="text"
+    placeholder="Year"
+    class="cert-year">
 
-${org} (${year})
+    <button class="delete-btn"
+    onclick="this.parentElement.remove(); updatePreview();">
 
-</p>
-`;
+    Delete
+
+    </button>
+    `;
+
+    container.appendChild(div);
+
+    addListeners();
+}
+
+
+/* LISTENERS */
+
+function addListeners() {
+
+    document.querySelectorAll("input, textarea")
+        .forEach(input => {
+
+            input.removeEventListener(
+                "input",
+                updatePreview
+            );
+
+            input.addEventListener(
+                "input",
+                updatePreview
+            );
+        });
+}
+
+
+/* PREVIEW */
+
+function updatePreview() {
+
+    document.getElementById("previewName")
+        .innerText =
+        document.getElementById("name").value;
+
+    /* CONTACT */
+
+    document.getElementById("previewContact")
+        .innerText =
+        document.getElementById("email").value +
+        " | " +
+        document.getElementById("phone").value;
+
+    /* LINKS */
+
+    let linksHTML = "";
+
+    const github =
+        document.getElementById("github").value;
+
+    const linkedin =
+        document.getElementById("linkedin").value;
+
+    if (github) {
+
+        linksHTML += `
+        <a href="${github}"
+        target="_blank"
+        class="link-btn">
+
+        GitHub
+
+        </a>
+        `;
+    }
+
+    if (linkedin) {
+
+        linksHTML += `
+        <a href="${linkedin}"
+        target="_blank"
+        class="link-btn">
+
+        LinkedIn
+
+        </a>
+        `;
+    }
+
+    document.getElementById("previewLinks")
+        .innerHTML = linksHTML;
+
+    /* SUMMARY */
+
+    document.getElementById("previewSummary")
+        .innerText =
+        document.getElementById("summary").value;
+
+    /* SKILLS */
+
+    let skillsHTML = "";
+
+    document.getElementById("skills")
+        .value
+        .split("\n")
+        .forEach(line => {
+
+            if (line.includes(":")) {
+
+                let parts = line.split(":");
+
+                skillsHTML += `
+                <p>
+
+                <b>${parts[0]}:</b>
+
+                ${parts[1]}
+
+                </p>
+                `;
+            }
+
+            else {
+
+                skillsHTML += `
+                <p>${line}</p>
+                `;
+            }
+        });
+
+    document.getElementById("previewSkills")
+        .innerHTML = skillsHTML;
+
+    /* PROJECTS */
+
+    let projectHTML = "";
+
+    document.getElementById("projects")
+        .value
+        .split("\n")
+        .forEach(line => {
+
+            if (line.includes(":")) {
+
+                let parts = line.split(":");
+
+                projectHTML += `
+                <p>
+
+                <b>${parts[0]}</b><br>
+
+                ${parts[1]}
+
+                </p>
+                `;
+            }
+
+            else {
+
+                projectHTML += `
+                <p>${line}</p>
+                `;
+            }
+        });
+
+    document.getElementById("previewProjects")
+        .innerHTML = projectHTML;
+
+    /* CUSTOM */
+
+    document.getElementById("previewCustomTitle")
+        .innerText =
+        document.getElementById("customTitle").value;
+
+    document.getElementById("previewCustomContent")
+        .innerText =
+        document.getElementById("customContent").value;
+
+    /* EDUCATION */
+
+    let eduHTML = "";
+
+    document.querySelectorAll(".edu-block")
+        .forEach(block => {
+
+            const degree =
+                block.querySelector(".degree");
+
+            if (degree) {
+
+                eduHTML += `
+                <p>
+
+                <b>${degree.value}</b><br>
+
+                ${block.querySelector(".college").value}
+
+                (${block.querySelector(".year").value})
+
+                </p>
+                `;
+            }
+        });
+
+    document.getElementById("previewEducation")
+        .innerHTML = eduHTML;
+
+    /* EXPERIENCE */
+
+    let expHTML = "";
+
+    document.querySelectorAll(".exp-block")
+        .forEach(block => {
+
+            expHTML += `
+            <p>
+
+            <b>${block.querySelector(".job").value}</b><br>
+
+            ${block.querySelector(".company").value}<br>
+
+            ${block.querySelector(".desc").value}
+
+            </p>
+            `;
+        });
+
+    document.getElementById("previewExperience")
+        .innerHTML = expHTML;
+
+    /* CERTIFICATIONS */
+
+    let certHTML = "";
+
+    document.querySelectorAll(".cert-name")
+        .forEach((item, index) => {
+
+            certHTML += `
+            <p>
+
+            <b>${document.querySelectorAll(".cert-name")[index].value}</b><br>
+
+            ${document.querySelectorAll(".cert-org")[index].value}
+
+            (${document.querySelectorAll(".cert-year")[index].value})
+
+            </p>
+            `;
+        });
+
+    document.getElementById("previewCertification")
+        .innerHTML = certHTML;
+}
+
+
+/* TEMPLATE */
+
+document.getElementById("templateSelect")
+.addEventListener("change", function () {
+
+    document.getElementById("resumePreview")
+        .className =
+        "resume-preview " + this.value;
 });
 
-document.getElementById(
-"previewCertification"
-).innerHTML =
-certHTML;
-}
+
+/* DOWNLOAD PDF */
+
+document.getElementById("downloadBtn")
+.addEventListener("click", async function () {
+
+    const education = [];
+
+    document.querySelectorAll(".edu-block")
+        .forEach(block => {
+
+            const degree =
+                block.querySelector(".degree");
+
+            if (degree) {
+
+                education.push({
+
+                    degree: degree.value,
+
+                    college:
+                        block.querySelector(".college").value,
+
+                    year:
+                        block.querySelector(".year").value
+                });
+            }
+        });
+
+    const experience = [];
+
+    document.querySelectorAll(".exp-block")
+        .forEach(block => {
+
+            experience.push({
+
+                job:
+                    block.querySelector(".job").value,
+
+                company:
+                    block.querySelector(".company").value,
+
+                desc:
+                    block.querySelector(".desc").value
+            });
+        });
+
+    const certifications = [];
+
+    document.querySelectorAll(".cert-name")
+        .forEach((item, index) => {
+
+            certifications.push({
+
+                name:
+                    document.querySelectorAll(".cert-name")[index].value,
+
+                org:
+                    document.querySelectorAll(".cert-org")[index].value,
+
+                year:
+                    document.querySelectorAll(".cert-year")[index].value
+            });
+        });
+
+    const response = await fetch(
+        "/generate_pdf",
+        {
+
+            method: "POST",
+
+            headers: {
+                "Content-Type": "application/json"
+            },
+
+            body: JSON.stringify({
+
+                image: uploadedImage,
+
+                name:
+                    document.getElementById("name").value,
+
+                email:
+                    document.getElementById("email").value,
+
+                phone:
+                    document.getElementById("phone").value,
+
+                github:
+                    document.getElementById("github").value,
+
+                linkedin:
+                    document.getElementById("linkedin").value,
+
+                summary:
+                    document.getElementById("summary").value,
+
+                skills:
+                    document.getElementById("skills").value,
+
+                projects:
+                    document.getElementById("projects").value,
+
+                customTitle:
+                    document.getElementById("customTitle").value,
+
+                customContent:
+                    document.getElementById("customContent").value,
+
+                education: education,
+
+                experience: experience,
+
+                certifications: certifications
+            })
+        }
+    );
+
+    const blob = await response.blob();
+
+    const url =
+        window.URL.createObjectURL(blob);
+
+    const a =
+        document.createElement("a");
+
+    a.href = url;
+
+    a.download = "resume.pdf";
+
+    a.click();
+
+    window.URL.revokeObjectURL(url);
+});
+
 
 /* INITIALIZE */
 
 addListeners();
-
-/* TEMPLATE CHANGE */
-
-document.getElementById(
-"templateSelect"
-).addEventListener(
-"change",
-function(){
-
-document.getElementById(
-"resumePreview"
-).className =
-"resume-preview " + this.value;
-});
-
-/* DOWNLOAD PDF */
-
-document.getElementById(
-"downloadBtn"
-).addEventListener(
-"click",
-async function(){
-
-const education = [];
-
-document.querySelectorAll(
-".edu-block"
-).forEach(block => {
-
-if(block.querySelector(".degree")){
-
-education.push({
-
-degree:
-block.querySelector(
-".degree"
-).value,
-
-college:
-block.querySelector(
-".college"
-).value,
-
-year:
-block.querySelector(
-".year"
-).value
-
-});
-}
-});
-
-const experience = [];
-
-document.querySelectorAll(
-".exp-block"
-).forEach(block => {
-
-experience.push({
-
-job:
-block.querySelector(
-".job"
-).value,
-
-company:
-block.querySelector(
-".company"
-).value,
-
-desc:
-block.querySelector(
-".desc"
-).value
-
-});
-});
-
-const certifications = [];
-
-document.querySelectorAll(
-".cert-name"
-).forEach((item,index) => {
-
-certifications.push({
-
-name:
-document.querySelectorAll(
-".cert-name"
-)[index].value,
-
-org:
-document.querySelectorAll(
-".cert-org"
-)[index].value,
-
-year:
-document.querySelectorAll(
-".cert-year"
-)[index].value
-
-});
-});
-
-const response =
-await fetch(
-"/generate_pdf",
-{
-
-method:"POST",
-
-headers:{
-"Content-Type":
-"application/json"
-},
-
-body:JSON.stringify({
-
-image:
-uploadedImage,
-
-name:
-document.getElementById(
-"name"
-).value,
-
-email:
-document.getElementById(
-"email"
-).value,
-
-phone:
-document.getElementById(
-"phone"
-).value,
-
-linkedin:
-document.getElementById(
-"linkedin"
-).value,
-
-github:
-document.getElementById(
-"github"
-).value,
-
-summary:
-document.getElementById(
-"summary"
-).value,
-
-skills:
-document.getElementById(
-"skills"
-).value,
-
-projects:
-document.getElementById(
-"projects"
-).value,
-
-customTitle:
-document.getElementById(
-"customTitle"
-).value,
-
-customContent:
-document.getElementById(
-"customContent"
-).value,
-
-education:
-education,
-
-experience:
-experience,
-
-certifications:
-certifications
-
-})
-});
-
-const blob =
-await response.blob();
-
-const url =
-window.URL.createObjectURL(
-blob
-);
-
-const a =
-document.createElement("a");
-
-a.href = url;
-
-a.download = "resume.pdf";
-
-a.click();
-});

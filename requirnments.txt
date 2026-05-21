@@ -1,3 +1,4 @@
 flask
 fpdf
 pillow
+gunicorn
