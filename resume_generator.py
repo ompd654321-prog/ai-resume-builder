@@ -634,6 +634,16 @@ def generate_resume(data):
 
     # PDF OUTPUT
 
-    pdf_bytes = bytes(pdf.output())
+    pdf_output = pdf.output(dest="S")
 
-    return pdf_bytes
+    if isinstance(pdf_output, bytearray):
+
+        return bytes(pdf_output)
+
+    elif isinstance(pdf_output, bytes):
+
+        return pdf_output
+
+    else:
+
+        return pdf_output.encode("latin-1")
